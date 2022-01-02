@@ -25,9 +25,8 @@ namespace Stock_Management
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-                services.AddDbContext<Ecommerce_Stock_ManagementContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("MSSQLConnectionString")));
-                services.AddControllersWithViews();
+            services.AddDbContext<Ecommerce_Stock_ManagementContext>(options => options.UseSqlServer(Configuration.GetConnectionString("MSSQLConnectionString")));
+            services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

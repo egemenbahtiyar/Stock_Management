@@ -11,11 +11,6 @@ namespace Stock_Management.Models
 {
     public partial class Ecommerce_Stock_ManagementContext : DbContext
     {
-        private readonly IConfiguration _configuration;
-        public Ecommerce_Stock_ManagementContext(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
 
         public Ecommerce_Stock_ManagementContext(DbContextOptions<Ecommerce_Stock_ManagementContext> options)
             : base(options)
@@ -35,7 +30,7 @@ namespace Stock_Management.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(_configuration.GetConnectionString("MSSQLConnectionString"));
+                optionsBuilder.UseSqlServer("Server=.\\SQLExpress;Database=Ecommerce_Stock_Management;Trusted_Connection=True;");
             }
         }
 
