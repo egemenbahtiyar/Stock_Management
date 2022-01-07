@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.Extensions.Configuration;
 
 // Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
 // If you have enabled NRTs for your project, then un-comment the following line:
@@ -11,20 +10,23 @@ namespace Stock_Management.Models
 {
     public partial class Ecommerce_Stock_ManagementContext : DbContext
     {
+        public Ecommerce_Stock_ManagementContext()
+        {
+        }
 
         public Ecommerce_Stock_ManagementContext(DbContextOptions<Ecommerce_Stock_ManagementContext> options)
             : base(options)
         {
         }
 
-        public virtual DbSet<Category> Categories { get; set; }
-        public virtual DbSet<Customer> Customers { get; set; }
-        public virtual DbSet<Employee> Employees { get; set; }
-        public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<Category> Category { get; set; }
+        public virtual DbSet<Customer> Customer { get; set; }
+        public virtual DbSet<Employee> Employee { get; set; }
+        public virtual DbSet<Order> Order { get; set; }
         public virtual DbSet<OrderDetails> OrderDetails { get; set; }
-        public virtual DbSet<OrderProduct> OrderProducts { get; set; }
-        public virtual DbSet<Product> Products { get; set; }
-        public virtual DbSet<Storage> Storages { get; set; }
+        public virtual DbSet<OrderProduct> OrderProduct { get; set; }
+        public virtual DbSet<Product> Product { get; set; }
+        public virtual DbSet<Storage> Storage { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -62,6 +64,8 @@ namespace Stock_Management.Models
                     .IsRequired()
                     .HasMaxLength(50);
 
+                entity.Property(e => e.CustomerPhone).HasMaxLength(20);
+
                 entity.Property(e => e.CustomerZipCode).HasMaxLength(10);
 
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
@@ -69,7 +73,6 @@ namespace Stock_Management.Models
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.Customer)
                     .HasForeignKey(d => d.OrderId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Customer_Order");
             });
 

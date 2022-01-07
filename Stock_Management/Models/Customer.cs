@@ -14,7 +14,8 @@ namespace Stock_Management.Models
         public string CustomerLname { get; set; }
         public string CustomerCity { get; set; }
         public string CustomerZipCode { get; set; }
-        public int OrderId { get; set; }
+        public string CustomerPhone { get; set; }
+        public int? OrderId { get; set; }
 
         public virtual Order Order { get; set; }
     }
