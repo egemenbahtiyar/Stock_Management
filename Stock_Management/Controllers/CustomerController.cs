@@ -60,6 +60,13 @@ namespace Stock_Management.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (_context.Customer.Select(r=>r.CustomerName).Contains(customer.CustomerName))
+                {
+                    var num = _context.Customer.Where(r => r.CustomerName == customer.CustomerName)
+                        .Select(r => r.CustomerName)
+                        .Count()+1;
+                    customer.CustomerName = String.Concat(customer.CustomerName,num.ToString());
+                }
                 _context.Add(customer);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

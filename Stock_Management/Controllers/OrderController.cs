@@ -45,7 +45,10 @@ namespace Stock_Management.Controllers
         // GET: Order/Create
         public IActionResult Create()
         {
-            return View();
+            var vm = new OrderViewModel();
+            ViewBag.CustomerN = new SelectList(_context.Customer, "CustomerId", "CustomerName");
+            ViewBag.Products = new SelectList(_context.Product, "ProductId", "ProductName");
+            return View(vm);
         }
 
         // POST: Order/Create
@@ -53,15 +56,23 @@ namespace Stock_Management.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("OrderId,OrderDate")] Order order)
-        {
-            if (ModelState.IsValid)
+        public async Task<IActionResult> Create(OrderViewModel Ovm)
+        { 
+            if (ModelState.IsValid && !(_context.Order.Any()))
             {
-                _context.Add(order);
+                var price = _context.Product.Find(Ovm.ProductId).ProductPrice;
+                Ovm.ProductPrice = price;
+                Ovm.TotalCost = price * Ovm.Quantitiy;
+                _context.Add(new Order() { OrderId = Ovm.OrderId, OrderDate = Ovm.OrderDate});
+                await _context.SaveChangesAsync();
+                _context.Add(new OrderProduct() { OrderId = _context.Order.OrderByDescending(r => r.OrderId).Select(r => r.OrderId).First(), ProductId = Ovm.ProductId });
+                _context.Add(new OrderDetails() { OrderId = _context.Order.OrderByDescending(r => r.OrderId).Select(r => r.OrderId).First(), Quantitiy = Ovm.Quantitiy, TotalCost = Ovm.TotalCost });
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(order);
+            ViewBag.CustomerN = new SelectList(_context.Customer, "CustomerId", "CustomerName");
+            ViewBag.Products = new SelectList(_context.Product, "ProductId", "ProductName");
+            return View(Ovm);
         }
 
         // GET: Order/Edit/5

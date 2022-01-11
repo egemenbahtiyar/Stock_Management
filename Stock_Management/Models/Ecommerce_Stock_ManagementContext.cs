@@ -73,7 +73,7 @@ namespace Stock_Management.Models
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.Customer)
                     .HasForeignKey(d => d.OrderId)
-                    .HasConstraintName("FK_Customer_Order");
+                    .HasConstraintName("FK_Customer_Order1");
             });
 
             modelBuilder.Entity<Employee>(entity =>
@@ -95,7 +95,7 @@ namespace Stock_Management.Models
                     .WithMany(p => p.Employee)
                     .HasForeignKey(d => d.StorageId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Employee_Storage");
+                    .HasConstraintName("FK_Employee_Storage1");
             });
 
             modelBuilder.Entity<Order>(entity =>
@@ -112,13 +112,13 @@ namespace Stock_Management.Models
                     .HasColumnName("OrderID")
                     .ValueGeneratedNever();
 
-                entity.Property(e => e.TotalCost).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.TotalCost).HasColumnType("decimal(18, 2)");
 
                 entity.HasOne(d => d.Order)
                     .WithOne(p => p.OrderDetails)
                     .HasForeignKey<OrderDetails>(d => d.OrderId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_OrderDetails_Order");
+                    .HasConstraintName("FK_OrderDetails_Order1");
             });
 
             modelBuilder.Entity<OrderProduct>(entity =>
@@ -135,13 +135,13 @@ namespace Stock_Management.Models
                     .WithMany(p => p.OrderProduct)
                     .HasForeignKey(d => d.OrderId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Order_Product_Order");
+                    .HasConstraintName("FK_Order_Product_Order1");
 
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.OrderProduct)
                     .HasForeignKey(d => d.ProductId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Order_Product_Product");
+                    .HasConstraintName("FK_Order_Product_Product1");
             });
 
             modelBuilder.Entity<Product>(entity =>
@@ -154,7 +154,7 @@ namespace Stock_Management.Models
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.ProductPrice).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.ProductPrice).HasColumnType("decimal(18, 2)");
 
                 entity.Property(e => e.StorageId).HasColumnName("StorageID");
 
