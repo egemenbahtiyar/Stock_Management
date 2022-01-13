@@ -58,8 +58,10 @@ namespace Stock_Management.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(OrderViewModel Ovm)
         { 
-            if (ModelState.IsValid && !(_context.Order.Any()))
+            if (ModelState.IsValid)
             {
+                var customerName = _context.Customer.Find(Ovm.CustomerId).CustomerName;
+                Ovm.Customer = customerName;
                 var price = _context.Product.Find(Ovm.ProductId).ProductPrice;
                 Ovm.ProductPrice = price;
                 Ovm.TotalCost = price * Ovm.Quantitiy;
