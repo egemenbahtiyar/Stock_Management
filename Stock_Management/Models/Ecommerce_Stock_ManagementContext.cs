@@ -32,6 +32,7 @@ namespace Stock_Management.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseSqlServer("Server=.\\SQLExpress;Database=Ecommerce_Stock_Management;Trusted_Connection=True;");
             }
         }
@@ -73,6 +74,7 @@ namespace Stock_Management.Models
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.Customer)
                     .HasForeignKey(d => d.OrderId)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK_Customer_Order1");
             });
 
@@ -117,7 +119,6 @@ namespace Stock_Management.Models
                 entity.HasOne(d => d.Order)
                     .WithOne(p => p.OrderDetails)
                     .HasForeignKey<OrderDetails>(d => d.OrderId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_OrderDetails_Order1");
             });
 
@@ -134,13 +135,11 @@ namespace Stock_Management.Models
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.OrderProduct)
                     .HasForeignKey(d => d.OrderId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Order_Product_Order1");
 
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.OrderProduct)
                     .HasForeignKey(d => d.ProductId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Order_Product_Product1");
             });
 

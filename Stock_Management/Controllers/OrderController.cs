@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Stock_Management.Models;
 
@@ -19,9 +20,35 @@ namespace Stock_Management.Controllers
         }
 
         // GET: Order
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Order.ToListAsync());
+            List<OrderIndexViewModel> OvmList = new List<OrderIndexViewModel>();
+            string connectionstring = "Server=.\\SQLExpress;Database=Ecommerce_Stock_Management;Trusted_Connection=True;";
+            using (SqlConnection connection = new SqlConnection(connectionstring))
+            {
+                connection.Open();
+
+                String sql = "select ProductName,ProductPrice,CustomerName,TotalCost,OrderDate,Quantitiy from [order] as O" +
+                    " inner join Customer as C on O.OrderID = C.OrderID" +
+                    " inner join Order_Product as OP on OP.OrderID = O.OrderID" +
+                    " inner join Product as P on OP.ProductID = P.ProductID" +
+                    " inner join OrderDetails as OD on O.OrderID =OD.OrderID";
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            OvmList.Add(new OrderIndexViewModel { ProductName = reader.GetString(0), ProductPrice = reader.GetDecimal(1),CustomerName= reader.GetString(2),TotalCost=reader.GetDecimal(3),OrderDate=reader.GetDateTime(4),Quantitiy=reader.GetInt32(5)});
+
+                        }
+                    }
+                }
+            }
+            //OvmList = _context.Order.Include("OrderDetails").Include("Order_Product").Include("Customer").ToList();
+
+
+            return View(OvmList);
         }
 
         // GET: Order/Details/5
@@ -56,20 +83,20 @@ namespace Stock_Management.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(OrderViewModel Ovm)
+        public IActionResult Create(OrderViewModel Ovm)
         { 
             if (ModelState.IsValid)
             {
-                var customerName = _context.Customer.Find(Ovm.CustomerId).CustomerName;
-                Ovm.Customer = customerName;
+                //_context.Database.ExecuteSqlRaw("Update Customer Set OrderID = " + Ovm.OrderId + "where CustomerID=" + Ovm.CustomerId);
                 var price = _context.Product.Find(Ovm.ProductId).ProductPrice;
                 Ovm.ProductPrice = price;
                 Ovm.TotalCost = price * Ovm.Quantitiy;
-                _context.Add(new Order() { OrderId = Ovm.OrderId, OrderDate = Ovm.OrderDate});
-                await _context.SaveChangesAsync();
+                var entitiy = new Order() { OrderId = Ovm.OrderId, OrderDate = Ovm.OrderDate };
+                _context.Add(entitiy);
+                _context.SaveChanges();
                 _context.Add(new OrderProduct() { OrderId = _context.Order.OrderByDescending(r => r.OrderId).Select(r => r.OrderId).First(), ProductId = Ovm.ProductId });
                 _context.Add(new OrderDetails() { OrderId = _context.Order.OrderByDescending(r => r.OrderId).Select(r => r.OrderId).First(), Quantitiy = Ovm.Quantitiy, TotalCost = Ovm.TotalCost });
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             ViewBag.CustomerN = new SelectList(_context.Customer, "CustomerId", "CustomerName");
