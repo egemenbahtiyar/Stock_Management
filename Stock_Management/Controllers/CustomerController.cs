@@ -21,8 +21,7 @@ namespace Stock_Management.Controllers
         // GET: Customer
         public async Task<IActionResult> Index()
         {
-            var ecommerce_Stock_ManagementContext = _context.Customer.Include(c => c.Order);
-            return View(await ecommerce_Stock_ManagementContext.ToListAsync());
+            return View(await _context.Customer.ToListAsync());
         }
 
         // GET: Customer/Details/5
@@ -34,7 +33,6 @@ namespace Stock_Management.Controllers
             }
 
             var customer = await _context.Customer
-                .Include(c => c.Order)
                 .FirstOrDefaultAsync(m => m.CustomerId == id);
             if (customer == null)
             {
@@ -47,7 +45,6 @@ namespace Stock_Management.Controllers
         // GET: Customer/Create
         public IActionResult Create()
         {
-            ViewData["OrderId"] = new SelectList(_context.Order, "OrderId", "OrderId");
             return View();
         }
 
@@ -56,22 +53,14 @@ namespace Stock_Management.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CustomerId,CustomerName,CustomerLname,CustomerCity,CustomerZipCode,CustomerPhone,OrderId")] Customer customer)
+        public async Task<IActionResult> Create([Bind("CustomerId,CustomerName,CustomerLname,CustomerCity,CustomerZipCode,CustomerPhone,CustomerStreet")] Customer customer)
         {
             if (ModelState.IsValid)
             {
-                if (_context.Customer.Select(r=>r.CustomerName).Contains(customer.CustomerName))
-                {
-                    var num = _context.Customer.Where(r => r.CustomerName == customer.CustomerName)
-                        .Select(r => r.CustomerName)
-                        .Count()+1;
-                    customer.CustomerName = String.Concat(customer.CustomerName,num.ToString());
-                }
                 _context.Add(customer);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["OrderId"] = new SelectList(_context.Order, "OrderId", "OrderId", customer.OrderId);
             return View(customer);
         }
 
@@ -88,7 +77,6 @@ namespace Stock_Management.Controllers
             {
                 return NotFound();
             }
-            ViewData["OrderId"] = new SelectList(_context.Order, "OrderId", "OrderId", customer.OrderId);
             return View(customer);
         }
 
@@ -97,7 +85,7 @@ namespace Stock_Management.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CustomerId,CustomerName,CustomerLname,CustomerCity,CustomerZipCode,CustomerPhone,OrderId")] Customer customer)
+        public async Task<IActionResult> Edit(int id, [Bind("CustomerId,CustomerName,CustomerLname,CustomerCity,CustomerZipCode,CustomerPhone,CustomerStreet")] Customer customer)
         {
             if (id != customer.CustomerId)
             {
@@ -124,7 +112,6 @@ namespace Stock_Management.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["OrderId"] = new SelectList(_context.Order, "OrderId", "OrderId", customer.OrderId);
             return View(customer);
         }
 
@@ -137,7 +124,6 @@ namespace Stock_Management.Controllers
             }
 
             var customer = await _context.Customer
-                .Include(c => c.Order)
                 .FirstOrDefaultAsync(m => m.CustomerId == id);
             if (customer == null)
             {

@@ -11,15 +11,15 @@ namespace Stock_Management.Models
     {
         public Order()
         {
-            Customer = new HashSet<Customer>();
             OrderProduct = new HashSet<OrderProduct>();
         }
 
         public int OrderId { get; set; }
         public DateTime OrderDate { get; set; }
+        public int CustomerId { get; set; }
 
+        public virtual Customer Customer { get; set; }
         public virtual OrderDetails OrderDetails { get; set; }
-        public virtual ICollection<Customer> Customer { get; set; }
         public virtual ICollection<OrderProduct> OrderProduct { get; set; }
     }
 }

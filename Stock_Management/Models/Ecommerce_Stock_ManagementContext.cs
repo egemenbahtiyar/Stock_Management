@@ -32,7 +32,6 @@ namespace Stock_Management.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseSqlServer("Server=.\\SQLExpress;Database=Ecommerce_Stock_Management;Trusted_Connection=True;");
             }
         }
@@ -65,17 +64,15 @@ namespace Stock_Management.Models
                     .IsRequired()
                     .HasMaxLength(50);
 
-                entity.Property(e => e.CustomerPhone).HasMaxLength(20);
+                entity.Property(e => e.CustomerPhone)
+                    .IsRequired()
+                    .HasMaxLength(20);
+
+                entity.Property(e => e.CustomerStreet)
+                    .IsRequired()
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.CustomerZipCode).HasMaxLength(10);
-
-                entity.Property(e => e.OrderId).HasColumnName("OrderID");
-
-                entity.HasOne(d => d.Order)
-                    .WithMany(p => p.Customer)
-                    .HasForeignKey(d => d.OrderId)
-                    .OnDelete(DeleteBehavior.Cascade)
-                    .HasConstraintName("FK_Customer_Order1");
             });
 
             modelBuilder.Entity<Employee>(entity =>
@@ -103,6 +100,11 @@ namespace Stock_Management.Models
             modelBuilder.Entity<Order>(entity =>
             {
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
+
+                entity.HasOne(d => d.Customer)
+                    .WithMany(p => p.Order)
+                    .HasForeignKey(d => d.CustomerId)
+                    .HasConstraintName("FK_Order_Customer");
             });
 
             modelBuilder.Entity<OrderDetails>(entity =>

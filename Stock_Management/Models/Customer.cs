@@ -9,14 +9,19 @@ namespace Stock_Management.Models
 {
     public partial class Customer
     {
+        public Customer()
+        {
+            Order = new HashSet<Order>();
+        }
+
         public int CustomerId { get; set; }
         public string CustomerName { get; set; }
         public string CustomerLname { get; set; }
         public string CustomerCity { get; set; }
         public string CustomerZipCode { get; set; }
         public string CustomerPhone { get; set; }
-        public int? OrderId { get; set; }
+        public string CustomerStreet { get; set; }
 
-        public virtual Order Order { get; set; }
+        public virtual ICollection<Order> Order { get; set; }
     }
 }

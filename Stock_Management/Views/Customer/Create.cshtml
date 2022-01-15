@@ -34,8 +34,13 @@
             </div>
             <div class="form-group">
                 <label asp-for="CustomerPhone" class="control-label"></label>
-                <input asp-for="CustomerPhone" class="form-control" type="tel" placeholder="888 888 8888" />
+                <input asp-for="CustomerPhone" class="form-control" />
                 <span asp-validation-for="CustomerPhone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CustomerStreet" class="control-label"></label>
+                <input asp-for="CustomerStreet" class="form-control" />
+                <span asp-validation-for="CustomerStreet" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

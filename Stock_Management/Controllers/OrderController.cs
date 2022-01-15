@@ -29,7 +29,7 @@ namespace Stock_Management.Controllers
                 connection.Open();
 
                 String sql = "select ProductName,ProductPrice,CustomerName,TotalCost,OrderDate,Quantitiy from [order] as O" +
-                    " inner join Customer as C on O.OrderID = C.OrderID" +
+                    " inner join Customer as C on C.CustomerID = O.CustomerId" +
                     " inner join Order_Product as OP on OP.OrderID = O.OrderID" +
                     " inner join Product as P on OP.ProductID = P.ProductID" +
                     " inner join OrderDetails as OD on O.OrderID =OD.OrderID";
@@ -91,7 +91,7 @@ namespace Stock_Management.Controllers
                 var price = _context.Product.Find(Ovm.ProductId).ProductPrice;
                 Ovm.ProductPrice = price;
                 Ovm.TotalCost = price * Ovm.Quantitiy;
-                var entitiy = new Order() { OrderId = Ovm.OrderId, OrderDate = Ovm.OrderDate };
+                var entitiy = new Order() { OrderId = Ovm.OrderId, OrderDate = Ovm.OrderDate,CustomerId=Ovm.CustomerId };
                 _context.Add(entitiy);
                 _context.SaveChanges();
                 _context.Add(new OrderProduct() { OrderId = _context.Order.OrderByDescending(r => r.OrderId).Select(r => r.OrderId).First(), ProductId = Ovm.ProductId });
