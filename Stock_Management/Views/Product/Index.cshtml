@@ -46,7 +46,15 @@
                 @Html.DisplayFor(modelItem => item.ProductDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Stocakable)
+                @if (item.Stocakable)
+                {
+                    <span class="badge bg-success">In Stock</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger">Out Of Stock</span>
+                }
+                @*@Html.DisplayFor(modelItem => item.Stocakable)*@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Category.CategoryName)
