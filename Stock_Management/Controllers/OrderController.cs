@@ -28,7 +28,7 @@ namespace Stock_Management.Controllers
             {
                 connection.Open();
 
-                String sql = "select ProductName,ProductPrice,CustomerName,TotalCost,OrderDate,Quantitiy from [order] as O" +
+                String sql = "select ProductName,ProductPrice,CustomerName,TotalCost,OrderDate,Quantitiy,O.OrderID from [order] as O" +
                     " inner join Customer as C on C.CustomerID = O.CustomerId" +
                     " inner join Order_Product as OP on OP.OrderID = O.OrderID" +
                     " inner join Product as P on OP.ProductID = P.ProductID" +
@@ -39,7 +39,7 @@ namespace Stock_Management.Controllers
                     {
                         while (reader.Read())
                         {
-                            OvmList.Add(new OrderIndexViewModel { ProductName = reader.GetString(0), ProductPrice = reader.GetDecimal(1),CustomerName= reader.GetString(2),TotalCost=reader.GetDecimal(3),OrderDate=reader.GetDateTime(4),Quantitiy=reader.GetInt32(5)});
+                            OvmList.Add(new OrderIndexViewModel { ProductName = reader.GetString(0), ProductPrice = reader.GetDecimal(1),CustomerName= reader.GetString(2),TotalCost=reader.GetDecimal(3),OrderDate=reader.GetDateTime(4),Quantitiy=reader.GetInt32(5),OrderId=reader.GetInt32(6)});
 
                         }
                     }
