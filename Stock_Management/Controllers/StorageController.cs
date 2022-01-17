@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Stock_Management.Models;
 
@@ -96,7 +97,9 @@ namespace Stock_Management.Controllers
             {
                 try
                 {
-                    _context.Update(storage);
+                    var sql = @"Update Storage SET StorageName = @NewStorageName,StorageLocation=@NewStorageLocation WHERE StorageId = @Id";
+                    _context.Database.ExecuteSqlRaw(sql,new SqlParameter("@NewStorageName",storage.StorageName),new SqlParameter("@NewStorageLocation",storage.StorageLocation),new SqlParameter("@Id",storage.StorageId));
+                    //_context.Update(storage);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -138,8 +141,9 @@ namespace Stock_Management.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var storage = await _context.Storage.FindAsync(id);
-            _context.Storage.Remove(storage);
+            //var storage = await _context.Storage.FindAsync(id);
+            _context.Database.ExecuteSqlRaw("Delete from Storage where StorageID=" + id);
+            //_context.Storage.Remove(storage);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

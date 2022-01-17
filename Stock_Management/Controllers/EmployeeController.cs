@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Stock_Management.Models;
 
@@ -101,7 +102,9 @@ namespace Stock_Management.Controllers
             {
                 try
                 {
-                    _context.Update(employee);
+                    var sql = @"Update Employee SET EmployeeName = @NewEName,EmployeeLname=@NewELname,EmployeeAge=@NewEAge,StorageId=@NewSId WHERE EmployeeId = @Id";
+                    _context.Database.ExecuteSqlRaw(sql,new SqlParameter("@NewEName",employee.EmployeeName), new SqlParameter("@NewELname", employee.EmployeeLname), new SqlParameter("@NewEAge", employee.EmployeeAge), new SqlParameter("@NewSId", employee.StorageId), new SqlParameter("@Id", employee.EmployeeId));
+                    //_context.Update(employee);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -145,8 +148,9 @@ namespace Stock_Management.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var employee = await _context.Employee.FindAsync(id);
-            _context.Employee.Remove(employee);
+            //var employee = await _context.Employee.FindAsync(id);
+            _context.Database.ExecuteSqlRaw("Delete from Employee where EmployeeID=" + id);
+            //_context.Employee.Remove(employee);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
