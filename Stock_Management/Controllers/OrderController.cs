@@ -39,7 +39,14 @@ namespace Stock_Management.Controllers
                     {
                         while (reader.Read())
                         {
-                            OvmList.Add(new OrderIndexViewModel { ProductName = reader.GetString(0), ProductPrice = reader.GetDecimal(1),CustomerName= reader.GetString(2),TotalCost=reader.GetDecimal(3),OrderDate=reader.GetDateTime(4),Quantitiy=reader.GetInt32(5),OrderId=reader.GetInt32(6)});
+                            OvmList.Add(new OrderIndexViewModel { 
+                                ProductName = reader.GetString(0), 
+                                ProductPrice = reader.GetDecimal(1),
+                                CustomerName= reader.GetString(2),
+                                TotalCost=reader.GetDecimal(3),
+                                OrderDate=reader.GetDateTime(4),
+                                Quantitiy=reader.GetInt32(5),
+                                OrderId=reader.GetInt32(6)});
 
                         }
                     }

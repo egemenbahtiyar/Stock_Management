@@ -62,7 +62,11 @@ namespace Stock_Management.Controllers
             if (ModelState.IsValid)
             {
                 var sql = @"Insert into Employee (EmployeeName,EmployeeLname,EmployeeAge,StorageId) Values(@NewEName,@NewLName,@NewEAge,@NewEStorage)";
-                _context.Database.ExecuteSqlRaw(sql, new SqlParameter("@NewEName", employee.EmployeeName), new SqlParameter("@NewLName", employee.EmployeeLname), new SqlParameter("@NewEAge", employee.EmployeeAge), new SqlParameter("@NewEStorage", employee.StorageId));
+                _context.Database
+                    .ExecuteSqlRaw(sql, new SqlParameter("@NewEName", employee.EmployeeName),
+                    new SqlParameter("@NewLName", employee.EmployeeLname),
+                    new SqlParameter("@NewEAge", employee.EmployeeAge),
+                    new SqlParameter("@NewEStorage", employee.StorageId));
                 //_context.Add(employee);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -105,7 +109,12 @@ namespace Stock_Management.Controllers
                 try
                 {
                     var sql = @"Update Employee SET EmployeeName = @NewEName,EmployeeLname=@NewELname,EmployeeAge=@NewEAge,StorageId=@NewSId WHERE EmployeeId = @Id";
-                    _context.Database.ExecuteSqlRaw(sql,new SqlParameter("@NewEName",employee.EmployeeName), new SqlParameter("@NewELname", employee.EmployeeLname), new SqlParameter("@NewEAge", employee.EmployeeAge), new SqlParameter("@NewSId", employee.StorageId), new SqlParameter("@Id", employee.EmployeeId));
+                    _context.Database
+                        .ExecuteSqlRaw(sql,new SqlParameter("@NewEName",employee.EmployeeName), 
+                        new SqlParameter("@NewELname", employee.EmployeeLname), 
+                        new SqlParameter("@NewEAge", employee.EmployeeAge), 
+                        new SqlParameter("@NewSId", employee.StorageId), 
+                        new SqlParameter("@Id", employee.EmployeeId));
                     //_context.Update(employee);
                     await _context.SaveChangesAsync();
                 }

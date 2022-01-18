@@ -102,7 +102,11 @@ namespace Stock_Management.Controllers
                 try
                 {
                     var sql = @"Update Storage SET StorageName = @NewStorageName,StorageLocation=@NewStorageLocation WHERE StorageId = @Id";
-                    _context.Database.ExecuteSqlRaw(sql,new SqlParameter("@NewStorageName",storage.StorageName),new SqlParameter("@NewStorageLocation",storage.StorageLocation),new SqlParameter("@Id",storage.StorageId));
+                    _context.Database
+                        .ExecuteSqlRaw(sql,
+                        new SqlParameter("@NewStorageName",storage.StorageName),
+                        new SqlParameter("@NewStorageLocation",storage.StorageLocation),
+                        new SqlParameter("@Id",storage.StorageId));
                     //_context.Update(storage);
                     await _context.SaveChangesAsync();
                 }
