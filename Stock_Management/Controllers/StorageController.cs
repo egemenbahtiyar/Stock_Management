@@ -22,7 +22,9 @@ namespace Stock_Management.Controllers
         // GET: Storage
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Storage.ToListAsync());
+            //var sql = @"select * from Storage";
+            //var entities = _context.Storage.FromSqlRaw("select * from Storage");
+            return View(await _context.Storage.FromSqlRaw("select * from Storage").ToListAsync<Storage>());
         }
 
         // GET: Storage/Details/5
@@ -58,7 +60,9 @@ namespace Stock_Management.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(storage);
+                var sql = @"Insert into Storage (StorageName,StorageLocation) Values(@NewStorageName,@NewStorageLocation)";
+                _context.Database.ExecuteSqlRaw(sql, new SqlParameter("@NewStorageName", storage.StorageName), new SqlParameter("@NewStorageLocation", storage.StorageLocation));
+                //_context.Add(storage);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }

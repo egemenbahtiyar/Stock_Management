@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Stock_Management.Models;
 using System;
@@ -22,12 +23,12 @@ namespace Stock_Management.Controllers
 
         public IActionResult Index(HomeIndexViewModel Hvm)
         {
-            Hvm.NoOfCategories = _context.Category.Count();
-            Hvm.NoOfCustomers = _context.Customer.Count();
-            Hvm.NoOfEmployees = _context.Employee.Count();
-            Hvm.NoOfOrders = _context.Order.Count();
-            Hvm.NoOfProducts = _context.Product.Count();
-            Hvm.NoOfStorages = _context.Storage.Count();
+            Hvm.NoOfCategories = _context.Category.FromSqlRaw("select * from Category").Count();
+            Hvm.NoOfCustomers = _context.Customer.FromSqlRaw("select * from Customer") .Count();
+            Hvm.NoOfEmployees = _context.Employee.FromSqlRaw("select * from Employee").Count();
+            Hvm.NoOfOrders = _context.Order.FromSqlRaw("select * from [order]").Count();
+            Hvm.NoOfProducts = _context.Product.FromSqlRaw("select * from Product").Count();
+            Hvm.NoOfStorages = _context.Storage.FromSqlRaw("select * from Storage").Count();
             return View(Hvm);
         }
 

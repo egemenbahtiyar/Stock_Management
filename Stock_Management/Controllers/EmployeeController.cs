@@ -61,7 +61,9 @@ namespace Stock_Management.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(employee);
+                var sql = @"Insert into Employee (EmployeeName,EmployeeLname,EmployeeAge,StorageId) Values(@NewEName,@NewLName,@NewEAge,@NewEStorage)";
+                _context.Database.ExecuteSqlRaw(sql, new SqlParameter("@NewEName", employee.EmployeeName), new SqlParameter("@NewLName", employee.EmployeeLname), new SqlParameter("@NewEAge", employee.EmployeeAge), new SqlParameter("@NewEStorage", employee.StorageId));
+                //_context.Add(employee);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }

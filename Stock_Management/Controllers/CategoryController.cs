@@ -22,7 +22,8 @@ namespace Stock_Management.Controllers
         // GET: Category
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Category.ToListAsync());
+            var _categories = _context.Category.FromSqlRaw("select * from Category").ToListAsync();
+            return View(await _categories);
         }
 
         // GET: Category/Details/5
@@ -58,7 +59,9 @@ namespace Stock_Management.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(category);
+                var sql = @"Insert into Category (CategoryName) Values(@NewCategoryName)";
+                _context.Database.ExecuteSqlRaw(sql, new SqlParameter("@NewCategoryName", category.CategoryName));
+                //_context.Add(category);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
