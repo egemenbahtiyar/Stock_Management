@@ -62,6 +62,9 @@ namespace Stock_Management.Controllers
         public IActionResult Create()
         {
             var vm = new OrderViewModel();
+            var date = DateTime.Now;
+            DateTime dtNew = date.AddTicks(-(date.Ticks % 1000000000));
+            vm.OrderDate = dtNew;
             ViewBag.CustomerN = new SelectList(_context.Customer, "CustomerId", "CustomerName");
             ViewBag.Products = new SelectList(_context.Product, "ProductId", "ProductName");
             return View(vm);
@@ -94,7 +97,7 @@ namespace Stock_Management.Controllers
         }
 
         // GET: Order/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
