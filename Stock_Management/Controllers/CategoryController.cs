@@ -22,7 +22,7 @@ namespace Stock_Management.Controllers
         // GET: Category
         public async Task<IActionResult> Index()
         {
-            var _categories = _context.Category.FromSqlRaw("select * from Category").ToListAsync();
+            var _categories = _context.Category.FromSqlRaw("select * from Category order by CategoryID Desc").ToListAsync();
             return View(await _categories);
         }
 

@@ -21,7 +21,7 @@ namespace Stock_Management.Controllers
         // GET: Product
         public async Task<IActionResult> Index()
         {
-            var ecommerce_Stock_ManagementContext = _context.Product.Include(p => p.Category).Include(p => p.Storage);
+            var ecommerce_Stock_ManagementContext = _context.Product.Include(p => p.Category).Include(p => p.Storage).OrderByDescending(r=>r.ProductId);
             return View(await ecommerce_Stock_ManagementContext.ToListAsync());
         }
 

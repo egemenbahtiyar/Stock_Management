@@ -22,7 +22,7 @@ namespace Stock_Management.Controllers
         // GET: Employee
         public async Task<IActionResult> Index()
         {
-            var ecommerce_Stock_ManagementContext = _context.Employee.Include(e => e.Storage);
+            var ecommerce_Stock_ManagementContext = _context.Employee.Include(e => e.Storage).OrderByDescending(r=>r.EmployeeId);
             return View(await ecommerce_Stock_ManagementContext.ToListAsync());
         }
 

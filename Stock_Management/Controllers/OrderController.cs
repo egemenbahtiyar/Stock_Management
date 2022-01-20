@@ -54,8 +54,8 @@ namespace Stock_Management.Controllers
             }
             //OvmList = _context.Order.Include("OrderDetails").Include("Order_Product").Include("Customer").ToList();
 
-
-            return View(OvmList);
+            var returned_list = OvmList.OrderByDescending(r => r.OrderId).ToList();
+            return View(returned_list);
         }
 
         // GET: Order/Create

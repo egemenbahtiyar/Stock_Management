@@ -21,7 +21,7 @@ namespace Stock_Management.Controllers
         // GET: Customer
         public async Task<IActionResult> Index()
         {
-            var _Customers = _context.Customer.FromSqlRaw("select * from Customer").ToListAsync();
+            var _Customers = _context.Customer.FromSqlRaw("select * from Customer order by CustomerID Desc").ToListAsync();
             return View(await _Customers);
         }
 

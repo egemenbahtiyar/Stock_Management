@@ -24,7 +24,7 @@ namespace Stock_Management.Controllers
         {
             //var sql = @"select * from Storage";
             //var entities = _context.Storage.FromSqlRaw("select * from Storage");
-            return View(await _context.Storage.FromSqlRaw("select * from Storage").ToListAsync<Storage>());
+            return View(await _context.Storage.FromSqlRaw("select * from Storage order by StorageID Desc").ToListAsync<Storage>());
         }
 
         // GET: Storage/Create
