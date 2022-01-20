@@ -4,31 +4,31 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Products</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class="btn btn-outline-success" asp-action="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ProductName)
+                Product Name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ProductPrice)
+                Product Price
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ProductDate)
+                Product Date
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Stocakable)
+                Stocakable
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Category)
+                Category
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Storage)
+                Storage
             </th>
             <th></th>
         </tr>
@@ -63,9 +63,8 @@
                 @Html.DisplayFor(modelItem => item.Storage.StorageName)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ProductId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
+                <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@item.ProductId">Edit</a>
+                <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
             </td>
         </tr>
 }

@@ -4,31 +4,31 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Customers</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class="btn btn-outline-success" asp-action="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.CustomerName)
+                Customer Name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CustomerLname)
+                Customer Lastname
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CustomerCity)
+                Customer City
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CustomerZipCode)
+                Customer ZipCode
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CustomerPhone)
+                Customer Phone
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CustomerStreet)
+                Customer Street
             </th>
             <th></th>
         </tr>
@@ -55,9 +55,8 @@
                 @Html.DisplayFor(modelItem => item.CustomerStreet)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.CustomerId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CustomerId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CustomerId">Delete</a>
+                <a class="btn btn-outline-warning" asp-action="Edit" asp-route-id="@item.CustomerId">Edit</a>
+                <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.CustomerId">Delete</a>
             </td>
         </tr>
 }
