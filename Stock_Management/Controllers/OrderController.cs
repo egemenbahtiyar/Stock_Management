@@ -100,13 +100,44 @@ namespace Stock_Management.Controllers
             {
                 return NotFound();
             }
+            OrderViewModel entitiy = new OrderViewModel();
+            string connectionstring = "Server=.\\SQLExpress;Database=Ecommerce_Stock_Management;Trusted_Connection=True;";
+            using (SqlConnection connection = new SqlConnection(connectionstring))
+            {
+                connection.Open();
 
-            var order = await _context.Order.FindAsync(id);
-            if (order == null)
+                String sql = "select P.ProductID,ProductPrice,C.CustomerID,TotalCost,OrderDate,Quantitiy,O.OrderID from [order] as O" +
+                    " inner join Customer as C on C.CustomerID = O.CustomerId" +
+                    " inner join Order_Product as OP on OP.OrderID = O.OrderID" +
+                    " inner join Product as P on OP.ProductID = P.ProductID" +
+                    " inner join OrderDetails as OD on O.OrderID =OD.OrderID" +
+                    " where O.OrderID="+id;
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            entitiy.ProductId = reader.GetInt32(0);
+                            entitiy.ProductPrice = reader.GetDecimal(1);
+                            entitiy.CustomerId = reader.GetInt32(2);
+                            entitiy.TotalCost = reader.GetDecimal(3);
+                            entitiy.OrderDate = reader.GetDateTime(4);
+                            entitiy.Quantitiy = reader.GetInt32(5);
+                            entitiy.OrderId = reader.GetInt32(6);
+
+                        }
+                    }
+                }
+            }
+            //var order = await _context.Order.FindAsync(id);
+            if (entitiy == null)
             {
                 return NotFound();
             }
-            return View(order);
+            ViewBag.CustomerN = new SelectList(_context.Customer, "CustomerId", "CustomerName");
+            ViewBag.Products = new SelectList(_context.Product, "ProductId", "ProductName");
+            return View(entitiy);
         }
 
         // POST: Order/Edit/5
@@ -114,9 +145,9 @@ namespace Stock_Management.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("OrderId,OrderDate")] Order order)
+        public async Task<IActionResult> Edit(int id, OrderViewModel Ovm)
         {
-            if (id != order.OrderId)
+            if (id != Ovm.OrderId)
             {
                 return NotFound();
             }
@@ -125,12 +156,18 @@ namespace Stock_Management.Controllers
             {
                 try
                 {
-                    _context.Update(order);
+                    Order order = new Order { OrderDate = Ovm.OrderDate, CustomerId = Ovm.CustomerId,OrderId=Ovm.OrderId };
+                    OrderProduct Oproduct = new OrderProduct { OrderId = Ovm.OrderId, ProductId = Ovm.ProductId };
+                    Product product = _context.Product.Find(Ovm.ProductId);
+                    OrderDetails orderDetails = new OrderDetails { Quantitiy = Ovm.Quantitiy, OrderId = Ovm.OrderId, TotalCost = product.ProductPrice*Ovm.Quantitiy };
+                    _context.Order.Update(order);
+                    _context.OrderDetails.Update(orderDetails);
+                    _context.OrderProduct.Update(Oproduct);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!OrderExists(order.OrderId))
+                    if (!OrderExists(Ovm.OrderId))
                     {
                         return NotFound();
                     }
@@ -141,7 +178,9 @@ namespace Stock_Management.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(order);
+            ViewBag.CustomerN = new SelectList(_context.Customer, "CustomerId", "CustomerName");
+            ViewBag.Products = new SelectList(_context.Product, "ProductId", "ProductName");
+            return View(Ovm);
         }
 
         // GET: Order/Delete/5

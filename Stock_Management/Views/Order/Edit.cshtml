@@ -1,4 +1,4 @@
-﻿@model Stock_Management.Models.Order
+﻿@model Stock_Management.Models.OrderViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -13,6 +13,21 @@
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="OrderId" />
+            <div class="form-group">
+                <label asp-for="CustomerId" class="control-label"></label>
+                <select asp-for="CustomerId" class="form-control" asp-items="ViewBag.CustomerN"></select>
+                <span asp-validation-for="CustomerId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductId" class="control-label"></label>
+                <select asp-for="ProductId" class="form-control" asp-items="ViewBag.Products"></select>
+                <span asp-validation-for="ProductId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Quantitiy" class="control-label"></label>
+                <input asp-for="Quantitiy" class="form-control" />
+                <span asp-validation-for="Quantitiy" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="OrderDate" class="control-label"></label>
                 <input asp-for="OrderDate" class="form-control" />
