@@ -25,26 +25,6 @@ namespace Stock_Management.Controllers
             return View(await ecommerce_Stock_ManagementContext.ToListAsync());
         }
 
-        // GET: Product/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var product = await _context.Product
-                .Include(p => p.Category)
-                .Include(p => p.Storage)
-                .FirstOrDefaultAsync(m => m.ProductId == id);
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            return View(product);
-        }
-
         // GET: Product/Create
         public IActionResult Create()
         {

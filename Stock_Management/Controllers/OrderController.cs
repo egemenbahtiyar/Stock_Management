@@ -58,24 +58,6 @@ namespace Stock_Management.Controllers
             return View(OvmList);
         }
 
-        // GET: Order/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var order = await _context.Order
-                .FirstOrDefaultAsync(m => m.OrderId == id);
-            if (order == null)
-            {
-                return NotFound();
-            }
-
-            return View(order);
-        }
-
         // GET: Order/Create
         public IActionResult Create()
         {

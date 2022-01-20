@@ -27,24 +27,6 @@ namespace Stock_Management.Controllers
             return View(await _context.Storage.FromSqlRaw("select * from Storage").ToListAsync<Storage>());
         }
 
-        // GET: Storage/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var storage = await _context.Storage
-                .FirstOrDefaultAsync(m => m.StorageId == id);
-            if (storage == null)
-            {
-                return NotFound();
-            }
-
-            return View(storage);
-        }
-
         // GET: Storage/Create
         public IActionResult Create()
         {
