@@ -13,5 +13,9 @@ namespace Stock_Management.Models
         public int NoOfCustomers { get; set; }
         public int NoOfStorages { get; set; }
         public int NoOfEmployees { get; set; }
+        public Decimal TotalCostOfOrders { get; set; }
+        public string TopSellingProduct { get; set; }
+        public string LastAddedProduct { get; set; }
+        public int EmployeesFromKonya { get; set; }
     }
 }

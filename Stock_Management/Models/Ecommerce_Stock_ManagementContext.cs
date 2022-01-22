@@ -32,6 +32,7 @@ namespace Stock_Management.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseSqlServer("Server=.\\SQLExpress;Database=Ecommerce_Stock_Management;Trusted_Connection=True;");
             }
         }
@@ -93,7 +94,6 @@ namespace Stock_Management.Models
                 entity.HasOne(d => d.Storage)
                     .WithMany(p => p.Employee)
                     .HasForeignKey(d => d.StorageId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Employee_Storage1");
             });
 
@@ -162,13 +162,11 @@ namespace Stock_Management.Models
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Product)
                     .HasForeignKey(d => d.CategoryId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Product_Category");
 
                 entity.HasOne(d => d.Storage)
                     .WithMany(p => p.Product)
                     .HasForeignKey(d => d.StorageId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Product_Storage");
             });
 

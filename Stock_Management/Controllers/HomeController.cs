@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Stock_Management.Models;
@@ -29,6 +30,79 @@ namespace Stock_Management.Controllers
             Hvm.NoOfOrders = _context.Order.FromSqlRaw("select * from [order]").Count();
             Hvm.NoOfProducts = _context.Product.FromSqlRaw("select * from Product").Count();
             Hvm.NoOfStorages = _context.Storage.FromSqlRaw("select * from Storage").Count();
+            string connectionstring = "Server=.\\SQLExpress;Database=Ecommerce_Stock_Management;Trusted_Connection=True;";
+            using (SqlConnection connection = new SqlConnection(connectionstring))
+            {
+                connection.Open();
+
+                String sql = "select * from [Total Price Of Sales]";
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Hvm.TotalCostOfOrders = reader.GetDecimal(0);
+
+                        }
+                    }
+                }
+            }
+            using (SqlConnection connection = new SqlConnection(connectionstring))
+            {
+                connection.Open();
+
+                String sql = "select * from [Top-selling product]";
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Hvm.TopSellingProduct = reader.GetString(0);
+
+                        }
+                    }
+                }
+            }
+            using (SqlConnection connection = new SqlConnection(connectionstring))
+            {
+                connection.Open();
+
+                String sql = "select * from [Last Added Product Name]";
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Hvm.LastAddedProduct = reader.GetString(0);
+
+                        }
+                    }
+                }
+            }
+            using (SqlConnection connection = new SqlConnection(connectionstring))
+            {
+                connection.Open();
+
+                String sql = "EXEC EmployeeFromKonya @City = 'Konya'";
+                using (SqlCommand command = new SqlCommand(sql, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Hvm.EmployeesFromKonya = reader.GetInt32(0);
+
+                        }
+                    }
+                }
+            }
+            //Hvm.TotalCostOfOrders = _context.Database.ExecuteSqlCommand("select * from [Total Price Of Sales]");
+            //Hvm.TopSellingProduct = _context.Database.ExecuteSqlRaw("select * from [Top-selling product]").ToString();
+            //Hvm.LastAddedProduct = _context.Database.ExecuteSqlRaw("select * from [Last Added Product Name]").ToString();
+            //Hvm.EmployeesFromKonya = _context.Database.ExecuteSqlRaw("EXEC EmployeeFromKonya @City = 'Konya'");
             return View(Hvm);
         }
 

@@ -132,10 +132,7 @@ namespace Stock_Management.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var product = await _context.Product.FindAsync(id);
-            var OrderProduct = _context.OrderProduct.FirstOrDefault(r=>r.ProductId==id);
-            var Order = _context.Order.Find(OrderProduct.OrderId);
             _context.Product.Remove(product);
-            _context.Order.Remove(Order);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
